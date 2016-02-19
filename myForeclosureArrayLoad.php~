@@ -1,0 +1,76 @@
+<?php
+//create short variable name
+//require_once "Dao.php";
+//$dao = new Dao();
+
+
+//$con = $dao->getConnection ();
+$con = mysql_connect("localhost","root","12345");
+
+
+
+
+
+if (!$con)
+  {
+  die('Could not connect: ' . mysql_error());
+  }
+echo "connected";
+
+
+
+	$fp = fopen("ParcelsRead.txt", 'rb');
+	if (!$fp) {
+		echo "<p><strong>File not openning!</strong></p>";
+		exit;
+	}
+	mysql_select_db("WEBSITE", $con);
+	while (!feof($fp)) {
+	  $bus= fgets($fp, 999);
+	  $adebaca = explode(',', $bus);	
+
+	// triming all the " - 
+	$str1 = trim(trim($adebaca[0]),'"');
+	$str2 = trim(trim($adebaca[1]),'"');
+	$str3 = trim(trim($adebaca[2]),'"');
+	$str4 = trim(trim($adebaca[3]),'"');
+	$str5 = trim(trim($adebaca[4]),'"');
+	$str6 = trim(trim($adebaca[5]),'"');
+	$str7 = trim(trim($adebaca[6]),'"');
+	$str8 = trim(trim($adebaca[7]),'"');
+	$str9 = trim(trim($adebaca[8]),'"');
+	$str10 = trim(trim($adebaca[9]),'"');
+	$str11 = trim(trim($adebaca[10]),'"');
+	$str12 = trim(trim($adebaca[11]),'"');
+
+
+  if (!get_magic_quotes_gpc()) {
+    $str1 = addslashes($str1);
+    $str2 = addslashes($str2);
+    $str3 = addslashes($str3);
+    $str4 = addslashes($str4);
+    $str5 = addslashes($str5);
+    $str6 = addslashes($str6);
+    $str7 = addslashes($str7);
+    $str8 = addslashes($str8);
+    $str9 = addslashes($str9);
+    $str10 = addslashes($str10);
+    $str11 = addslashes($str11);
+    $str12 = addslashes($str12);
+  }
+
+	mysql_query("INSERT INTO foreclosures(id,
+address, parcel, city, Morg_amoun, auction_date, Owner, Auction_plac, Auction_time, Recorded, Bank, Notes)
+	VALUES ('$str1','$str2','$str3','$str4','$str5','$str6','$str7','$str8','$str9','$str10','$str11','$str12')");
+
+
+
+
+
+	}
+mysql_close($con);
+echo "  closed";
+
+
+?>
+

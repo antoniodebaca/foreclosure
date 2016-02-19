@@ -1,0 +1,254 @@
+<?php
+// Dao.php
+// class for saving and getting comments from MySQL
+class Dao {
+
+  private $host = "localhost";
+  private $db = "WEBSITE";
+  private $user = "root";
+  private $pass = "12345";
+
+  public function getConnection () {
+    return
+      new PDO("mysql:host={$this->host};dbname={$this->db}", $this->user,
+          $this->pass);
+  }
+
+  public function saveComment ($comment) {
+    $conn = $this->getConnection();
+    $saveQuery =
+        "INSERT INTO comment
+        (comment)
+        VALUES
+        (:comment)";
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":comment", $comment);
+    $q->execute();
+  }
+
+  public function getComments () {
+    $conn = $this->getConnection();
+    return $conn->query("SELECT * FROM comment");
+  }
+  
+  public function getUser($email, $pass) {
+    $conn = $this->getConnection();
+    $salt      = 'hello_1m_@_SaLT';
+    $hash = hash('sha256', $pass . $salt);
+    $pass = $hash;
+    $getQuery = "SELECT Email, FName FROM users where Email = :email and Passwordd = :pass";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":email", $email);
+    $q->bindParam(":pass", $pass);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+
+    public function getPropertyDetails($address){
+    $conn = $this->getConnection();
+    $getQuery = "select * from parcels p where :address like concat('%',trim(p.Propaddnum),'%') and :address like concat('%',trim(p.Propstnm),'%') and  p.Propaddnum is not null and p.Propstnm is not null and p.Propaddnum <> '' and p.Propstnm <> ''";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":address", $address);
+    $q->execute();
+    return $q->fetchAll();
+  }
+
+    public function getPropertyParcelNum($address){
+    $conn = $this->getConnection();
+    $getQuery = "select p.Parcel from parcels p where :address like concat('%',trim(p.Propaddnum),'%') and :address like concat('%',trim(p.Propstnm),'%') and  p.Propaddnum is not null and p.Propstnm is not null and p.Propaddnum <> '' and p.Propstnm <> ''";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":address", $address);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+
+    public function getForeclosureDates(){
+    $conn = $this->getConnection();
+    $getQuery = 'SELECT address, city, Morg_amoun, Owner, Auction_plac, Auction_time FROM foreclosures where Auction_time != "" order by Auction_time asc limit 40';
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return $q->fetchAll();
+  }
+
+   /* public function getAllForeclosures(){
+    $conn = $this->getConnection();
+    $getQuery = "SELECT address, city, Morg_amoun, Owner, Auction_plac, Auction_time FROM foreclosures where Auction_time = """;
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  */
+    // this method gets the parcel with basic details
+    public function getEstate($Addstnum, $Addstnm) {
+    $conn = $this->getConnection();
+    $getQuery = "select * from parcels p where p.Addstnum like :Addstnum and p.Addstnm like 'louisa'";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":Addstnum", $Addstnum);
+    $q->bindParam(":Addstnm", $Addstnm);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+      // this method gets the parcel with basic details
+    public function getEstate2($Parcel) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * FROM parcels where Parcel = :Parcel";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":Parcel", $Parcel);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+  
+      // this method gets the parcel with basic details
+    public function getDetails($parcel) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT noofdwellin, occdate, yearbuilt, yearrem, effage, bathrooms, constclass, fireplace, heating, ac,  carstor2, porchsqft,
+    decksqft, Deckcover, Patiosqft, Patiocover, Poolsqft, Grflsqft, Upflsqft, Lwrflsqftu, Bsmtflsqfu,
+    Atticsqftu FROM resichar where parcel = :parcel";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":parcel", $parcel);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+  
+  
+    // this method gets the parcel with basic details
+    public function getOwner($Primowner) {
+    $conn = $this->getConnection();
+    $Primowner = "%$Primowner%";
+    $getQuery = "SELECT * FROM parcels where Primowner like :Primowner";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":Primowner", $Primowner);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+  public function saveUser ($email, $fname, $lname, $phone, $password) {
+    $conn = $this->getConnection();
+    $salt = 'hello_1m_@_SaLT';
+    $hash = hash('sha256',$password . $salt); 
+    $password = $hash;
+    $saveQuery =
+        "INSERT INTO users
+        (Email, FName, LName, Phone, Passwordd)
+        VALUES
+        (:email, :fname, :lname, :phone, :password)";
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":email", $email);
+    $q->bindParam(":fname", $fname);
+    $q->bindParam(":lname", $lname);
+    $q->bindParam(":phone", $phone);
+    $q->bindParam(":password", $password);
+    $q->execute();
+  }
+  
+    public function saveUserSearch ($email,$address) {
+    $conn = $this->getConnection();
+    $saveQuery =
+        "INSERT INTO userdata
+        (Email, Address, dateofsearch)
+        VALUES
+        (:email, :address, now())";
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":email", $email);
+    $q->bindParam(":address", $address);
+    $q->execute();
+  }
+  
+  
+      // this method gets the parcel with basic details
+    public function getAllUserData() {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT Email, Parcel FROM userdata";
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+        // this method gets the parcel with basic details
+    public function getSpecificUserData($email) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * FROM userdata where Email = :email group by Address";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":email", $email);
+    $q->execute();
+    return $q->fetchAll();
+  }
+    
+      // this method gets the parcel with basic details
+    public function getMyHistory($email) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * FROM userdata where Email = :email group by address";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":email", $email);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+        // this method gets the parcel with basic details
+    public function getLogOn() {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * from logon group by username";
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+  public function saveLogOn($email) {
+     $conn = $this->getConnection();
+            $saveQuery =
+        "INSERT INTO logon
+        (username)
+        VALUES
+        (:email)";
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":email", $email);
+    $q->execute();
+  }
+  
+    public function LogOff($email) {
+     $conn = $this->getConnection();
+            $saveQuery =
+        "DELETE from logon where username = :email";
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":email", $email);
+    $q->bindParam(":email", $email);
+    $q->execute();
+  }
+  
+  public function getEmail($email) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * FROM email where receiver = :email";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":email", $email);
+    $q->execute();
+    return $q->fetchAll();
+  }
+  
+  public function sendEmail($sender, $receiver, $message){
+    $conn = $this->getConnection();
+    $saveQuery =
+        "INSERT INTO email
+        (sender, receiver, message, sent, open)
+        VALUES
+        (:sender, :receiver, :message, now(), NULL)";
+
+    $q = $conn->prepare($saveQuery);
+    $q->bindParam(":sender", $sender);
+    $q->bindParam(":receiver", $receiver);
+    $q->bindParam(":message", $message);
+    $q->execute();
+  }
+
+    public function getMessage($id) {
+    $conn = $this->getConnection();
+    $getQuery = "SELECT * FROM email where id = :id";
+    $q = $conn->prepare($getQuery);
+    $q->bindParam(":id", $id);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+  
+} // end Dao
+?>
+

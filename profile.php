@@ -30,7 +30,7 @@ $email = $_GET["Email"];
     foreach ($historys as $history) {
       echo "<tr> ";
        echo "<td> " . $email . " </td>";
-      echo "<td> " . $history["Address"] . " </td>";
+      echo "<td> " . $history["address"] . " </td>";
       echo "<td> " . $history["dateofsearch"] . " </td>";
       echo "<td><a href='property_handler.php?Propaddnum=" . $history["Address"] . "'>"." View user search". "</a></td>";
       echo "</tr> ";

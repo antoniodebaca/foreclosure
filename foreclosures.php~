@@ -43,7 +43,7 @@ $dao = new Dao();
       echo "<td> " . $estate["Owner"] . " </td>";
       echo "<td> " . $estate["Auction_plac"] . " </td>";
       echo "<td> " . $estate["Auction_time"] . " </td>";
-      echo "<td><a href='detail.php?address=" . $house["Parcel"] . "'>"." More Data". "</a></td>";
+      echo "<td><a href='detail.php?Parcel=" . $house["Parcel"] . "'>"." More Data". "</a></td>";
       echo "</tr> ";
       
     }
@@ -70,6 +70,7 @@ $dao = new Dao();
   </div> 
 <br>
 <br>
+
 <a href="foreclosures.php">link text</a>
 <br>
 <br>

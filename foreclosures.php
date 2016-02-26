@@ -62,7 +62,7 @@ $dao = new Dao();
       
     foreach ($users as $user) {
       echo "<tr> ";
-      echo "<td><a href='profileReady.php?Email=" . htmlspecialchars($user["username"]) .  "'>".htmlspecialchars($user["username"]). "</a> </td>";
+      echo "<td><a href='profile.php?Email=" . htmlspecialchars($user["username"]) .  "'>".htmlspecialchars($user["username"]). "</a> </td>";
       echo "</tr> ";
     }
     echo "</table>";
@@ -70,6 +70,7 @@ $dao = new Dao();
   </div> 
 <br>
 <br>
+
 <a href="foreclosures.php">link text</a>
 <br>
 <br>

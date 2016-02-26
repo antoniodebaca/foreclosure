@@ -249,6 +249,14 @@ class Dao {
     return reset($q->fetchAll());
   }
   
+    public function getTotalDebt() {
+    $conn = $this->getConnection();
+    $getQuery = "select sum(Morg_amoun) as total from foreclosures where Notes not like 'sold%' and Notes not like 'rei%'";
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return reset($q->fetchAll());
+  }
+
 } // end Dao
 ?>
 

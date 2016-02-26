@@ -13,7 +13,7 @@ session_start();
 ?>
 
 <?php $_SESSION["currentpage"]="login"; include("header.php"); ?>
-    <h3>Login to my Secret System</h3>
+    <h3>Login</h3>
     <?php
     if (isset($_SESSION["status"])) {
       echo "<div id='status'>" .  $_SESSION["status"] . "</div>";

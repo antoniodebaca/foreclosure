@@ -1,5 +1,7 @@
     <div id="footer">
-      Please let me know what else I could provide for this app. Feel free to call me @9579777
+      <?php $value = $dao->getTotalDebt();
+       echo "<tr> " . "Total Debt In Active Foreclosure In Ada County : " . $value[total] . " </td?>"; ?>
+
     </div>
   </body>
 </html>

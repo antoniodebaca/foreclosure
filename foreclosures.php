@@ -54,6 +54,7 @@ $dao = new Dao();
 <br>
    <div id="nav3"> 
       <?php
+      $dao->deletePeopleNotLoggedOn();
       $users = $dao->getLogOn();
       echo "<table>";
       echo "<tr> ";

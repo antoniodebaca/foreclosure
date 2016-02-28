@@ -16,7 +16,7 @@ if (isset($_SESSION["access_granted"]) && !$_SESSION["access_granted"] ||
   $estate = $dao->getDetails($parcel); 
   $estates = $dao->getEstate2($parcel);
   $dao->saveUserSearch($_SESSION["email"],$estates["Address"]);
-  $googleLoc =  $estates["Address"] . ", Boise, ID";
+  $googleLoc =  $estates["Address"] . ", ". $estates["City_state"] . ", ID";
     echo "<table>";
       echo "<tr> ";
       echo "<td> " . "Property Address" . ": " . $estates["Address"] . " </td>";

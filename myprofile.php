@@ -40,6 +40,7 @@ $email =$_SESSION["email"]
 </form>
    <div id="nav3"> 
       <?php
+      $dao->deletePeopleNotLoggedOn();
       $users = $dao->getLogOn();
       echo "<table>";
       echo "<tr> ";

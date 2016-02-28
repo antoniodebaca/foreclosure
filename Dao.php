@@ -193,14 +193,23 @@ class Dao {
     $q->execute();
     return $q->fetchAll();
   }
-  
+
+        // this method gets the parcel with basic details
+    public function deletePeopleNotLoggedOn() {
+    $conn = $this->getConnection();
+    $getQuery = "delete from logon where TIMESTAMPDIFF(MINUTE, dateoflogon, NOW()) > 480";
+    $q = $conn->prepare($getQuery);
+    $q->execute();
+    return $q->fetchAll();
+  }  
+
   public function saveLogOn($email) {
      $conn = $this->getConnection();
             $saveQuery =
         "INSERT INTO logon
-        (username)
+        (username, dateoflogon)
         VALUES
-        (:email)";
+        (:email, now())";
     $q = $conn->prepare($saveQuery);
     $q->bindParam(":email", $email);
     $q->execute();
